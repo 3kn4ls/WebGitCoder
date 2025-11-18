@@ -1,0 +1,27 @@
+<div class="sidebar-container">
+  <!-- Tabs de navegación -->
+  <div class="sidebar-tabs">
+    <div
+      class="tab"
+      [class.active]="activeTab === 'explorer'"
+      (click)="setActiveTab('explorer')"
+      title="Explorador de archivos"
+    >
+      📁
+    </div>
+    <div
+      class="tab"
+      [class.active]="activeTab === 'git'"
+      (click)="setActiveTab('git')"
+      title="Control de código fuente"
+    >
+      🌿
+    </div>
+  </div>
+
+  <!-- Contenido de las tabs -->
+  <div class="sidebar-content">
+    <app-file-explorer *ngIf="activeTab === 'explorer'"></app-file-explorer>
+    <app-git-panel *ngIf="activeTab === 'git'"></app-git-panel>
+  </div>
+</div>

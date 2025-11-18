@@ -1,0 +1,154 @@
+<div class="git-panel">
+  <div class="panel-header">
+    <h3>CONTROL DE CÓDIGO FUENTE</h3>
+    <div class="header-actions">
+      <button class="icon-btn" (click)="loadData()" title="Actualizar">
+        🔄
+      </button>
+      <button class="icon-btn" (click)="initRepository()" title="Inicializar repositorio">
+        🌱
+      </button>
+    </div>
+  </div>
+
+  <!-- Sección de cambios -->
+  <div class="changes-section">
+    <div class="section-header">
+      <h4>Cambios ({{ getTotalChanges() }})</h4>
+      <div class="section-actions">
+        <button class="icon-btn" (click)="stageAll()" title="Agregar todos los cambios" *ngIf="getTotalChanges() > 0">
+          ➕
+        </button>
+        <button class="icon-btn" (click)="openCommitDialog()" title="Commit" *ngIf="getTotalChanges() > 0">
+          ✅
+        </button>
+      </div>
+    </div>
+
+    <div class="changes-list">
+      <!-- Archivos modificados -->
+      <ng-container *ngIf="status.modified.length > 0">
+        <div class="file-group">
+          <div class="group-header">
+            <span class="group-icon">{{ getStatusIcon('modified') }}</span>
+            <span class="group-name">{{ getStatusLabel('modified') }} ({{ status.modified.length }})</span>
+          </div>
+          <div class="file-item" *ngFor="let file of status.modified">
+            <span class="file-name">{{ file }}</span>
+            <button class="action-btn" (click)="stageFile(file)" title="Agregar al stage">
+              ➕
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Archivos sin seguimiento -->
+      <ng-container *ngIf="status.untracked.length > 0">
+        <div class="file-group">
+          <div class="group-header">
+            <span class="group-icon">{{ getStatusIcon('untracked') }}</span>
+            <span class="group-name">{{ getStatusLabel('untracked') }} ({{ status.untracked.length }})</span>
+          </div>
+          <div class="file-item" *ngFor="let file of status.untracked">
+            <span class="file-name">{{ file }}</span>
+            <button class="action-btn" (click)="stageFile(file)" title="Agregar al stage">
+              ➕
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Archivos agregados -->
+      <ng-container *ngIf="status.added.length > 0">
+        <div class="file-group">
+          <div class="group-header">
+            <span class="group-icon">{{ getStatusIcon('added') }}</span>
+            <span class="group-name">{{ getStatusLabel('added') }} ({{ status.added.length }})</span>
+          </div>
+          <div class="file-item" *ngFor="let file of status.added">
+            <span class="file-name">{{ file }}</span>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Archivos eliminados -->
+      <ng-container *ngIf="status.deleted.length > 0">
+        <div class="file-group">
+          <div class="group-header">
+            <span class="group-icon">{{ getStatusIcon('deleted') }}</span>
+            <span class="group-name">{{ getStatusLabel('deleted') }} ({{ status.deleted.length }})</span>
+          </div>
+          <div class="file-item" *ngFor="let file of status.deleted">
+            <span class="file-name">{{ file }}</span>
+            <button class="action-btn" (click)="stageFile(file)" title="Agregar al stage">
+              ➕
+            </button>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Sin cambios -->
+      <div class="no-changes" *ngIf="getTotalChanges() === 0">
+        <p>✨ No hay cambios</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección de commits -->
+  <div class="commits-section">
+    <div class="section-header">
+      <h4>Historial de Commits ({{ commits.length }})</h4>
+    </div>
+
+    <div class="commits-list">
+      <div class="commit-item" *ngFor="let commit of commits">
+        <div class="commit-message">{{ commit.message }}</div>
+        <div class="commit-meta">
+          <span class="commit-author">{{ commit.author.name }}</span>
+          <span class="commit-date">{{ formatDate(commit.timestamp) }}</span>
+        </div>
+        <div class="commit-hash">{{ commit.oid.substring(0, 7) }}</div>
+      </div>
+
+      <div class="no-commits" *ngIf="commits.length === 0">
+        <p>📝 No hay commits todavía</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog para commit -->
+<div class="modal" *ngIf="showCommitDialog" (click)="closeCommitDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Crear Commit</h2>
+    <div class="form-group">
+      <label>Mensaje del commit:</label>
+      <textarea
+        [(ngModel)]="commitMessage"
+        placeholder="Describe tus cambios..."
+        rows="4"
+        autofocus
+      ></textarea>
+    </div>
+    <div class="form-group">
+      <label>Autor:</label>
+      <input
+        type="text"
+        [(ngModel)]="authorName"
+        placeholder="Tu nombre"
+      />
+    </div>
+    <div class="form-group">
+      <label>Email:</label>
+      <input
+        type="email"
+        [(ngModel)]="authorEmail"
+        placeholder="tu@email.com"
+      />
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeCommitDialog()">Cancelar</button>
+      <button (click)="commit()" [disabled]="!commitMessage.trim()">Commit</button>
+    </div>
+  </div>
+</div>

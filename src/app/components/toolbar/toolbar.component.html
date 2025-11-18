@@ -1,0 +1,102 @@
+<div class="toolbar">
+  <div class="toolbar-section">
+    <div class="logo">
+      <span class="logo-icon">⚡</span>
+      <span class="logo-text">WebGitCoder</span>
+    </div>
+  </div>
+
+  <div class="toolbar-section center">
+    <button class="toolbar-btn" (click)="openCloneDialog()" title="Clonar repositorio">
+      <span class="icon">📥</span>
+      Clonar
+    </button>
+
+    <button class="toolbar-btn" (click)="pull()" title="Pull desde remoto">
+      <span class="icon">⬇️</span>
+      Pull
+    </button>
+
+    <button class="toolbar-btn" (click)="push()" title="Push a remoto">
+      <span class="icon">⬆️</span>
+      Push
+    </button>
+
+    <button class="toolbar-btn" (click)="saveAll()" title="Guardar todos los archivos">
+      <span class="icon">💾</span>
+      Guardar Todo
+    </button>
+  </div>
+
+  <div class="toolbar-section">
+    <div class="branch-info">
+      <span class="icon">🌿</span>
+      {{ currentBranch }}
+    </div>
+  </div>
+</div>
+
+<!-- Dialog para clonar repositorio -->
+<div class="modal" *ngIf="showCloneDialog" (click)="closeCloneDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Clonar Repositorio</h2>
+    <div class="form-group">
+      <label>URL del repositorio:</label>
+      <input
+        type="text"
+        [(ngModel)]="cloneUrl"
+        placeholder="https://github.com/usuario/repositorio.git"
+        (keyup.enter)="cloneRepository()"
+      />
+    </div>
+    <div class="form-group">
+      <label>Usuario (opcional):</label>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="usuario"
+      />
+    </div>
+    <div class="form-group">
+      <label>Token/Contraseña (opcional):</label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="token o contraseña"
+        (keyup.enter)="cloneRepository()"
+      />
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeCloneDialog()">Cancelar</button>
+      <button (click)="cloneRepository()" [disabled]="!cloneUrl">Clonar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog para credenciales -->
+<div class="modal" *ngIf="showCredentialsDialog" (click)="closeCredentialsDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Autenticación Requerida</h2>
+    <div class="form-group">
+      <label>Usuario:</label>
+      <input
+        type="text"
+        [(ngModel)]="username"
+        placeholder="usuario"
+      />
+    </div>
+    <div class="form-group">
+      <label>Token/Contraseña:</label>
+      <input
+        type="password"
+        [(ngModel)]="password"
+        placeholder="token o contraseña"
+        (keyup.enter)="submitCredentials()"
+      />
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeCredentialsDialog()">Cancelar</button>
+      <button (click)="submitCredentials()">Aceptar</button>
+    </div>
+  </div>
+</div>

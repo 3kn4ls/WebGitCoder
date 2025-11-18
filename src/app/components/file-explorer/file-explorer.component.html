@@ -1,0 +1,88 @@
+<div class="file-explorer">
+  <div class="explorer-header">
+    <h3>EXPLORADOR</h3>
+    <div class="header-actions">
+      <button class="icon-btn" (click)="openNewFileDialog()" title="Nuevo archivo">
+        📄
+      </button>
+      <button class="icon-btn" (click)="openNewFolderDialog()" title="Nueva carpeta">
+        📁
+      </button>
+    </div>
+  </div>
+
+  <div class="file-tree">
+    <ng-container *ngFor="let node of fileTree">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: node, level: 0 }"></ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<!-- Template recursivo para el árbol de archivos -->
+<ng-template #nodeTemplate let-node let-level="level">
+  <div
+    class="tree-node"
+    [class.selected]="selectedNode?.path === node.path"
+    [style.padding-left.px]="getNodeIndent(level)"
+    (click)="onNodeClick(node)"
+  >
+    <span class="node-icon">{{ getNodeIcon(node) }}</span>
+    <span class="node-name">{{ node.name }}</span>
+    <div class="node-actions">
+      <button class="action-btn" (click)="renameNode(node); $event.stopPropagation()" title="Renombrar">
+        ✏️
+      </button>
+      <button class="action-btn" (click)="deleteNode(node); $event.stopPropagation()" title="Eliminar">
+        🗑️
+      </button>
+    </div>
+  </div>
+
+  <ng-container *ngIf="node.type === 'directory' && node.isExpanded && node.children">
+    <ng-container *ngFor="let child of node.children">
+      <ng-container *ngTemplateOutlet="nodeTemplate; context: { $implicit: child, level: level + 1 }"></ng-container>
+    </ng-container>
+  </ng-container>
+</ng-template>
+
+<!-- Dialog para nuevo archivo -->
+<div class="modal" *ngIf="showNewFileDialog" (click)="closeNewFileDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Nuevo Archivo</h2>
+    <div class="form-group">
+      <label>Nombre del archivo:</label>
+      <input
+        type="text"
+        [(ngModel)]="newItemName"
+        placeholder="ejemplo.txt"
+        (keyup.enter)="createNewFile()"
+        autofocus
+      />
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeNewFileDialog()">Cancelar</button>
+      <button (click)="createNewFile()" [disabled]="!newItemName">Crear</button>
+    </div>
+  </div>
+</div>
+
+<!-- Dialog para nueva carpeta -->
+<div class="modal" *ngIf="showNewFolderDialog" (click)="closeNewFolderDialog()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <h2>Nueva Carpeta</h2>
+    <div class="form-group">
+      <label>Nombre de la carpeta:</label>
+      <input
+        type="text"
+        [(ngModel)]="newItemName"
+        placeholder="nueva-carpeta"
+        (keyup.enter)="createNewFolder()"
+        autofocus
+      />
+    </div>
+    <div class="modal-actions">
+      <button (click)="closeNewFolderDialog()">Cancelar</button>
+      <button (click)="createNewFolder()" [disabled]="!newItemName">Crear</button>
+    </div>
+  </div>
+</div>

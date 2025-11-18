@@ -1,0 +1,87 @@
+<div class="editor-wrapper">
+  <!-- Tabs de archivos abiertos -->
+  <div class="editor-tabs" *ngIf="openFiles.length > 0">
+    <div
+      *ngFor="let file of openFiles"
+      class="editor-tab"
+      [class.active]="activeFile?.path === file.path"
+      [class.dirty]="file.isDirty"
+      (click)="switchToFile(file)"
+    >
+      <span class="tab-icon">{{ getFileIcon(file) }}</span>
+      <span class="tab-name">{{ file.name }}</span>
+      <span class="dirty-indicator" *ngIf="file.isDirty">●</span>
+      <button class="tab-close" (click)="closeFile(file, $event)">×</button>
+    </div>
+  </div>
+
+  <!-- Área del editor -->
+  <div class="editor-content">
+    <div class="editor-container" *ngIf="activeFile">
+      <ngx-monaco-editor
+        [options]="editorOptions"
+        [(ngModel)]="activeFile.content"
+        (onInit)="onEditorInit($event)"
+        (ngModelChange)="onContentChange($event)"
+      ></ngx-monaco-editor>
+    </div>
+
+    <!-- Pantalla de bienvenida -->
+    <div class="welcome-screen" *ngIf="!activeFile">
+      <div class="welcome-content">
+        <h1>⚡ WebGitCoder</h1>
+        <p>Cliente de programación web con soporte Git</p>
+
+        <div class="welcome-actions">
+          <div class="action-group">
+            <h3>Comenzar</h3>
+            <ul>
+              <li>📥 Clona un repositorio usando el botón "Clonar" en la barra superior</li>
+              <li>📁 Crea o abre archivos desde el explorador de archivos</li>
+              <li>✏️ Edita código con resaltado de sintaxis</li>
+              <li>💾 Guarda tus cambios</li>
+              <li>🌿 Gestiona cambios con Git en el panel de control de código fuente</li>
+            </ul>
+          </div>
+
+          <div class="action-group">
+            <h3>Atajos de teclado</h3>
+            <ul>
+              <li><kbd>Ctrl</kbd> + <kbd>S</kbd> - Guardar archivo actual</li>
+              <li><kbd>Ctrl</kbd> + <kbd>K</kbd> <kbd>S</kbd> - Guardar todos los archivos</li>
+              <li><kbd>Ctrl</kbd> + <kbd>F</kbd> - Buscar en el archivo</li>
+              <li><kbd>Ctrl</kbd> + <kbd>H</kbd> - Reemplazar</li>
+            </ul>
+          </div>
+
+          <div class="action-group">
+            <h3>Características</h3>
+            <ul>
+              <li>✨ Editor de código Monaco (el mismo de VS Code)</li>
+              <li>🎨 Tema oscuro similar a VS Code</li>
+              <li>📂 Sistema de archivos virtual en el navegador</li>
+              <li>🔄 Operaciones Git: clone, commit, push, pull</li>
+              <li>🌳 Explorador de archivos con árbol jerárquico</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra de estado -->
+  <div class="status-bar" *ngIf="activeFile">
+    <div class="status-left">
+      <span class="status-item">{{ activeFile.language }}</span>
+      <span class="status-item">{{ activeFile.path }}</span>
+    </div>
+    <div class="status-right">
+      <span class="status-item" *ngIf="activeFile.isDirty" (click)="saveCurrentFile()" style="cursor: pointer;">
+        💾 Sin guardar - Click para guardar
+      </span>
+      <span class="status-item" *ngIf="!activeFile.isDirty">
+        ✓ Guardado
+      </span>
+    </div>
+  </div>
+</div>

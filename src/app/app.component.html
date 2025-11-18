@@ -1,0 +1,26 @@
+<div class="app-container"
+     (mousemove)="onMouseMove($event)"
+     (mouseup)="onMouseUp()">
+
+  <!-- Barra superior de herramientas -->
+  <app-toolbar></app-toolbar>
+
+  <!-- Contenedor principal -->
+  <div class="main-container">
+
+    <!-- Barra lateral -->
+    <div class="sidebar" [style.width.px]="sidebarWidth">
+      <app-sidebar></app-sidebar>
+    </div>
+
+    <!-- Divisor redimensionable -->
+    <div class="resizer"
+         (mousedown)="onMouseDown($event)"></div>
+
+    <!-- Área de editor -->
+    <div class="editor-container">
+      <app-editor></app-editor>
+    </div>
+
+  </div>
+</div>

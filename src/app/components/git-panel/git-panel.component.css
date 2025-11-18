@@ -1,0 +1,255 @@
+.git-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.panel-header h3 {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.icon-btn:hover {
+  opacity: 1;
+}
+
+.changes-section,
+.commits-section {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.changes-section {
+  flex: 1;
+  min-height: 200px;
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.commits-section {
+  flex: 1;
+  min-height: 150px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.section-header h4 {
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.section-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.changes-list,
+.commits-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.file-group {
+  margin-bottom: 8px;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  padding: 6px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  background-color: rgba(255, 255, 255, 0.02);
+  border-bottom: 1px solid var(--vscode-border);
+}
+
+.group-icon {
+  margin-right: 6px;
+  font-size: 14px;
+}
+
+.group-name {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px 6px 32px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.file-item:hover {
+  background-color: var(--vscode-list-hover);
+}
+
+.file-name {
+  font-size: 13px;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 6px;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.action-btn:hover {
+  opacity: 1;
+}
+
+.no-changes,
+.no-commits {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.no-changes p,
+.no-commits p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.commit-item {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--vscode-border);
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.commit-item:hover {
+  background-color: var(--vscode-list-hover);
+}
+
+.commit-message {
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.commit-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.commit-author {
+  font-weight: 500;
+}
+
+.commit-hash {
+  font-size: 10px;
+  font-family: 'Courier New', monospace;
+  opacity: 0.5;
+}
+
+/* Modal styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--vscode-sidebar-bg);
+  border: 1px solid var(--vscode-border);
+  border-radius: 6px;
+  padding: 20px;
+  min-width: 400px;
+  max-width: 90vw;
+}
+
+.modal-content h2 {
+  margin: 0 0 20px 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 13px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
