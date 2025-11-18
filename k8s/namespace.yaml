@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: webgitcoder
+  labels:
+    app: webgitcoder
+    environment: production

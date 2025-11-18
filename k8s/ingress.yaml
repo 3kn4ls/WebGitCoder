@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: webgitcoder
+  namespace: webgitcoder
+  labels:
+    app: webgitcoder
+  annotations:
+    # Traefik annotations (k3s usa Traefik por defecto)
+    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+    # Si tienes cert-manager configurado, descomenta:
+    # cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  rules:
+  - host: webgitcoder.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: webgitcoder
+            port:
+              number: 80
+  # Si tienes cert-manager, descomenta para HTTPS:
+  # tls:
+  # - hosts:
+  #   - webgitcoder.local
+  #   secretName: webgitcoder-tls

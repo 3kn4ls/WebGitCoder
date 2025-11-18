@@ -48,6 +48,8 @@ Cliente de programación web completo con soporte Git, desarrollado en Angular. 
 
 ## 🛠️ Instalación
 
+### Desarrollo Local
+
 1. **Clonar el repositorio**:
    ```bash
    git clone https://github.com/usuario/WebGitCoder.git
@@ -66,6 +68,20 @@ Cliente de programación web completo con soporte Git, desarrollado en Angular. 
 
 4. **Abrir en el navegador**:
    Navega a `http://localhost:4200`
+
+### Despliegue en Producción (k3s Raspberry Pi 5)
+
+Para desplegar en un clúster k3s en Raspberry Pi 5:
+
+```bash
+# Despliegue automatizado
+./deploy.sh
+
+# Ver documentación completa de despliegue
+cat DEPLOY.md
+```
+
+Ver [DEPLOY.md](DEPLOY.md) para instrucciones detalladas de despliegue en k3s.
 
 ## 📖 Guía de Uso
 
