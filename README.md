@@ -77,11 +77,13 @@ Para desplegar en un clúster k3s en Raspberry Pi 5:
 # Despliegue automatizado
 ./deploy.sh
 
-# Ver documentación completa de despliegue
-cat DEPLOY.md
+# La aplicación estará disponible en:
+# https://northr3nd.duckdns.org/webgitcoder
 ```
 
 Ver [DEPLOY.md](DEPLOY.md) para instrucciones detalladas de despliegue en k3s.
+
+**Nota**: El despliegue usa HTTPS y requiere que el secret SSL `northr3nd-tls` exista en el namespace.
 
 ## 📖 Guía de Uso
 

@@ -6,25 +6,24 @@ metadata:
   labels:
     app: webgitcoder
   annotations:
-    # Traefik annotations (k3s usa Traefik por defecto)
-    traefik.ingress.kubernetes.io/router.entrypoints: web,websecure
-    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
-    # Si tienes cert-manager configurado, descomenta:
-    # cert-manager.io/cluster-issuer: letsencrypt-prod
+    # Traefik annotations para reescritura de rutas
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+    # Middleware para strip prefix si es necesario
+    # traefik.ingress.kubernetes.io/router.middlewares: webgitcoder-stripprefix@kubernetescrd
 spec:
+  tls:
+  - hosts:
+    - northr3nd.duckdns.org
+    secretName: northr3nd-tls
   rules:
-  - host: webgitcoder.local
+  - host: northr3nd.duckdns.org
     http:
       paths:
-      - path: /
+      - path: /webgitcoder
         pathType: Prefix
         backend:
           service:
             name: webgitcoder
             port:
               number: 80
-  # Si tienes cert-manager, descomenta para HTTPS:
-  # tls:
-  # - hosts:
-  #   - webgitcoder.local
-  #   secretName: webgitcoder-tls

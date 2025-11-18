@@ -183,15 +183,11 @@ show_status() {
     log_success "Despliegue completado exitosamente!"
     echo ""
 
-    # Obtener la IP del clúster
-    CLUSTER_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="InternalIP")].address}')
-
     log_info "Accede a la aplicación en:"
-    echo -e "  ${GREEN}http://webgitcoder.local${NC}"
-    echo -e "  ${GREEN}http://${CLUSTER_IP}${NC} (si no tienes DNS configurado)"
+    echo -e "  ${GREEN}https://northr3nd.duckdns.org/webgitcoder${NC}"
     echo ""
-    log_info "Agrega esta línea a tu /etc/hosts si es necesario:"
-    echo -e "  ${YELLOW}${CLUSTER_IP} webgitcoder.local${NC}"
+    log_info "Nota: Asegúrate de que el certificado SSL esté correctamente configurado"
+    echo -e "      y que el secret 'northr3nd-tls' exista en el namespace ${NAMESPACE}"
 }
 
 # Función para rollback

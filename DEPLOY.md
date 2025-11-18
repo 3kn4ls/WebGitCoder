@@ -131,25 +131,32 @@ IMAGE_TAG=$(git rev-parse --short HEAD) ./deploy.sh
 
 ## 🌐 Acceso a la Aplicación
 
-### Configurar DNS Local
+La aplicación está configurada para ser accesible en:
 
-Agrega esta línea a tu `/etc/hosts`:
+**https://northr3nd.duckdns.org/webgitcoder**
+
+### Requisitos Previos
+
+1. **Certificado SSL**: Asegúrate de que el certificado SSL esté instalado
+2. **Secret de Kubernetes**: El secret `northr3nd-tls` debe existir en el namespace `webgitcoder`
+
+### Verificar el Certificado SSL
 
 ```bash
-# Reemplaza <IP_RASPBERRY_PI> con la IP de tu Raspberry Pi
-<IP_RASPBERRY_PI> webgitcoder.local
-```
+# Verificar que el secret existe
+kubectl get secret northr3nd-tls -n webgitcoder
 
-Ejemplo:
-```bash
-192.168.1.100 webgitcoder.local
+# Si no existe, créalo desde tus archivos de certificado
+kubectl create secret tls northr3nd-tls \
+  --cert=path/to/tls.crt \
+  --key=path/to/tls.key \
+  -n webgitcoder
 ```
 
 ### Acceder a la Aplicación
 
 Abre tu navegador y visita:
-- **http://webgitcoder.local**
-- O directamente por IP: **http://<IP_RASPBERRY_PI>**
+- **https://northr3nd.duckdns.org/webgitcoder**
 
 ## 🔍 Verificación del Despliegue
 
@@ -237,46 +244,52 @@ kubectl rollout undo deployment/webgitcoder -n webgitcoder
 kubectl rollout history deployment/webgitcoder -n webgitcoder
 ```
 
-## 🔐 Configuración HTTPS (Opcional)
+## 🔐 Configuración HTTPS
 
-Para habilitar HTTPS con cert-manager:
+La aplicación ya está configurada para usar HTTPS con el dominio `northr3nd.duckdns.org`.
 
-### 1. Instalar cert-manager
+### Secret SSL Requerido
+
+El Ingress espera un secret TLS llamado `northr3nd-tls` en el namespace `webgitcoder`.
+
+**Si el secret ya existe globalmente**, cópialo al namespace:
 
 ```bash
-kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+# Copiar secret de otro namespace
+kubectl get secret northr3nd-tls -n <namespace-origen> -o yaml | \
+  sed 's/namespace: .*/namespace: webgitcoder/' | \
+  kubectl apply -f -
 ```
 
-### 2. Crear ClusterIssuer
+**Si necesitas crear el secret desde archivos de certificado**:
+
+```bash
+kubectl create secret tls northr3nd-tls \
+  --cert=/path/to/tls.crt \
+  --key=/path/to/tls.key \
+  -n webgitcoder
+```
+
+**Si usas cert-manager**, puedes crear un Certificate:
 
 ```yaml
-# cluster-issuer.yaml
+# certificate.yaml
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Certificate
 metadata:
-  name: letsencrypt-prod
+  name: northr3nd-tls
+  namespace: webgitcoder
 spec:
-  acme:
-    server: https://acme-v02.api.letsencrypt.org/directory
-    email: tu-email@ejemplo.com
-    privateKeySecretRef:
-      name: letsencrypt-prod
-    solvers:
-    - http01:
-        ingress:
-          class: traefik
+  secretName: northr3nd-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+  - northr3nd.duckdns.org
 ```
 
 ```bash
-kubectl apply -f cluster-issuer.yaml
-```
-
-### 3. Actualizar Ingress
-
-Descomenta las secciones de TLS en `k8s/ingress.yaml` y aplica:
-
-```bash
-kubectl apply -f k8s/ingress.yaml
+kubectl apply -f certificate.yaml
 ```
 
 ## 🧹 Limpieza Completa
